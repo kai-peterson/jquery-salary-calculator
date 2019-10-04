@@ -2,9 +2,9 @@ $(document).ready(readyNow);
 
 function readyNow() {
     $('#submitButton').on('click', appendInfo);
+    $('#submitButton').on('click', calculateSalary);
     $('table').on('click', '.delete', deleteRow); 
-    // $('#submitButton').on('click', calculateSalary);
-    // $('.delete').on('click', calculateSalary);
+    $('table').on('click', '.delete', calculateSalary);
 }
 
 let employees = [];
@@ -15,7 +15,7 @@ function appendInfo() {
     let id = $('#id').val();
     let title = $('#title').val();
     let salary = $('#salary').val();
-    let infoString = $(`<tr><td>${firstName}</td><td>${lastName}</td><td>${id}</td><td>${title}</td><td>${salary}</td><td><button class="delete">Delete</button></td></tr>`);
+    let infoString = $(`<tr><td class="theFirstName">${firstName}</td><td>${lastName}</td><td>${id}</td><td>${title}</td><td>${salary}</td><td><button class="delete">Delete</button></td></tr>`);
     $('.tableBody').append(infoString);
     let newEmployeeObject = {
         firstName: firstName,
@@ -34,5 +34,24 @@ function appendInfo() {
 }
 
 function deleteRow() {
+    let name = $(this).parent().siblings('.theFirstName').text();
+    testingThis(employees, name);
     $(this).closest('tr').remove();
+}
+
+function calculateSalary() {
+    let monthlySalary = 0;
+    let employeeArray = employees;
+    for (let i = 0; i < employeeArray.length; i++) {
+        monthlySalary += Number(employeeArray[i].salary);
+    }
+    $('h2').text('Total Monthly Salary: $' + monthlySalary);
+}
+
+function testingThis(employeeArray, name) {
+    for (i = 0; i < employeeArray.length; i++) {
+        if (employeeArray[i].firstName == name) {
+            employees.splice(i, 1);
+        }
+    }
 }
