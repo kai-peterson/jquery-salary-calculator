@@ -21,6 +21,7 @@ h1 {
 h2 {
     float: right;
     margin-right: 25px;
+    padding: 10px;
 }
 
 h3 {
@@ -83,4 +84,12 @@ th, td {
     height: 20px;
     border: none;
     background-color: #f2f2f2;
+}
+
+.footer {
+    font-size: 0;
+}
+
+.hidden {
+    visibility: hidden;
 }
