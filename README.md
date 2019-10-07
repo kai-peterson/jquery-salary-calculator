@@ -44,5 +44,5 @@ Additional README details can be found [here](https://github.com/PrimeAcademy/gi
         - remove that employee's object from overall array using their ID
         - calculate and update new total monthly salary
     - write two new functions to clean up how dollar amounts are displayed on the DOM
-        - one function to a number to the nearest dollar
+        - one function to round a number to the nearest dollar
         - second function to add appropriate commas to large numbers (works with any whole number)
