@@ -24,7 +24,7 @@ function appendInfo() {
         return null;
     }
     // create and append string include a table row and six table data with all the input values and a button
-    let infoString = $(`<tr><td class="theFirstName">${firstName}</td><td>${lastName}</td><td>${id}</td><td>${title}</td><td>$${salaryCommas}</td><td><button class="delete">Delete</button></td></tr>`);
+    let infoString = $(`<tr><td>${firstName}</td><td>${lastName}</td><td class="idNumber">${id}</td><td>${title}</td><td>$${salaryCommas}</td><td><button class="delete">Delete</button></td></tr>`);
     $('.tableBody').append(infoString);
     // create object with input values and push it into employee array
     let newEmployeeObject = {
@@ -47,16 +47,16 @@ function appendInfo() {
 // change this to check for employee number, so there can be no duplicates
 function deleteRow() {
     // grab the name of the employee in the to-be-deleted to use for removeEmployee
-    let name = $(this).parent().siblings('.theFirstName').text();
-    removeEmployee(employees, name);
+    let id = $(this).parent().siblings('.idNumber').text();
+    removeEmployee(employees, id);
     // remove the entire row from the table
     $(this).closest('tr').remove();
 }
 
 // loops through array of employees for a matching name, then splices the whole object
-function removeEmployee(employeeArray, name) {
+function removeEmployee(employeeArray, id) {
     for (i = 0; i < employeeArray.length; i++) {
-        if (employeeArray[i].firstName == name) {
+        if (employeeArray[i].id == id) {
             employees.splice(i, 1);
         }
     }
@@ -68,48 +68,54 @@ function removeEmployee(employeeArray, name) {
 function calculateSalary() {
     let monthlySalary = 0;
     let employeeArray = employees;
+
     for (let i = 0; i < employeeArray.length; i++) {
         monthlySalary += Number(employeeArray[i].salary);
     }
+
     monthlySalary /= 12;
     monthlySalary = roundToDollar(monthlySalary);
-    monthlySalary = addCommas(monthlySalary);
+    $('h2').remove();
+    $('.totalMonthly').append('<h2>Total Monthly Salary: $' + addCommas(monthlySalary) + '<br><span id="note">(rounded to the nearest dollar)</span></h2>')
+
     if (monthlySalary >= 20000) {
         $('h2').css('background-color', 'red');
     }
-    $('h2').text('Total Monthly Salary: $' + monthlySalary);
 }
 
 function addCommas(number) {
     let originalString = String(number);
     let stringLength = originalString;
-    let temp = '';
+    let newString = '';
+
     for (let i = 1; i < stringLength.length + 1; i++) {
         // grab the last number of the string
-        // concat the number onto the beginning temp
-        temp = originalString.charAt(originalString.length - 1) + temp;
+        // concat the number onto the beginning newString
+        newString = originalString.charAt(originalString.length - 1) + newString;
         // remove the last number from string
         originalString = originalString.slice(0, originalString.length - 1)
         // if index == stringLength.length, concat the number with no comma
         // otherwise, when index % 3 == 0 add a comma in from of the number
         // unless it's
         if (i == stringLength.length) {
-            temp = originalString.charAt(originalString.length - 1) + temp;
-            return temp;
+            newString = originalString.charAt(originalString.length - 1) + newString;
+            return newString;
         }
         else if (i % 3 == 0) {
-            temp = ',' + temp;
+            newString = ',' + newString;
         }
     }
-    return temp;
+    return newString;
 }
 
 function roundToDollar(number) {
-    // if the number has a decimal, find index and slice string accordingly
     let stringNumber = String(number)
+    let indexOfPeriod = stringNumber.indexOf('.');
+
+    // if the number has a decimal, find index and slice string accordingly
     if (stringNumber.includes('.')) {
-        let newNumber = stringNumber.slice(0, stringNumber.indexOf('.'));
-        if (stringNumber.slice(stringNumber.indexOf('.') + 1, stringNumber.indexOf('.') + 3) >= 50) {
+        let newNumber = stringNumber.slice(0, indexOfPeriod);
+        if (stringNumber.slice(indexOfPeriod + 1, indexOfPeriod + 3) >= 50) {
             return Number(newNumber) + 1;
         }
         return Number(newNumber);
